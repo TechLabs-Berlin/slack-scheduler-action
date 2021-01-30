@@ -4,6 +4,9 @@ const messageBuilder = require('./src/message-builder')
 const slack = require('./src/slack')
 const fs = require('fs');
 
+const setup = require('./setup')
+
+
 //todo make proper async
 try {
     const messageFilePath = core.getInput("message-file");
@@ -12,7 +15,7 @@ try {
 
     const token = core.getInput('slack-user-oauth-access-token');
 
-    
+    setup.deleteAllScheduledMessages(token);
 
 
     for(let message of  messages){

@@ -11,6 +11,7 @@ async function deleteAllScheduledMessages(token){
     }
 }
 
-const token = core.getInput('slack-user-oauth-access-token');
+// const token = core.getInput('slack-user-oauth-access-token');
 
-deleteAllScheduledMessages(token);
+module.exports = {deleteAllScheduledMessages}
+// deleteAllScheduledMessages(token);

@@ -16,5 +16,5 @@ outputs:
     description: 'The time we greeted you'
 runs:
   using: 'node12'
-  pre: 'setup.js'
+  pre: 'setup.js' #TODO Does not work locally investigate
   main: 'index.js'
