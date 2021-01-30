@@ -1,11 +1,11 @@
 
 - text: write some
-  post_at: "2021-01-30T12:40:00+01:00"
-  channel: "C01L5KHRTQD"
+  post_at: "2021-01-30T13:00:00+01:00"
+  channel: "test"
 
 - text: |
     Hey guys :ai:
     **How are you doing**
     **This works great**
-  post_at: "2021-01-30T12:40:00+01:00"
-  channel: "C01L5KHRTQD"
+  post_at: "2021-01-30T13:00:00+01:00"
+  channel: "ranom"

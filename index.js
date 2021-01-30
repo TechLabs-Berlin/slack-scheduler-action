@@ -7,6 +7,17 @@ const yaml = require('js-yaml');
 
 const setup = require('./setup')
 
+function convertChannelNameToId(channel, channels){
+    for(let c of channels){
+        if(c.id == channel){
+            return channel;
+        }
+        if(c.name == channel){
+            return c.id;
+        }
+    }
+    return null;
+}
 
 //todo make proper async
 try {    
@@ -18,9 +29,12 @@ try {
 
     setup.deleteAllScheduledMessages(token);
 
+    const channels = slack.getChannelsFromUser(token);
+
+
 
     for(let message of  messages){
-        const messageBuilded = messageBuilder(message.channel, message.text, message.post_at);
+        const messageBuilded = messageBuilder(convertChannelNameToId(message.channel, channels), message.text, message.post_at);
         const result = slack.sendMessage(token,messageBuilded);
         //TODO put in proper error handling
     }

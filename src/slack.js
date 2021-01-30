@@ -1,7 +1,7 @@
 const https = require("https");
 
 async function sendMessage(token, message){
-    const response = await post(token,"/api/chat.scheduleMessage", message);
+    const response = await request("POST", token,"/api/chat.scheduleMessage", message);
     const result = JSON.parse(response.result);
   
     if (!result || !result.ok || response.statusCode !== 200) {
@@ -12,7 +12,7 @@ async function sendMessage(token, message){
 }
 
 async function getScheduledMessages(token) {
-    const response = await post(token,"/api/chat.scheduledMessages.list", {});
+    const response = await request("POST",token,"/api/chat.scheduledMessages.list", {});
     if(response.statusCode == 200){
         const parsedBody = JSON.parse(response.result);
         if(parsedBody.ok){
@@ -25,7 +25,7 @@ async function getScheduledMessages(token) {
 }
 
 async function deleteScheduledMessage(token, channel, scheduledMessageId) {
-    const response = await post(token,"/api/chat.deleteScheduledMessage", {
+    const response = await request("POST",token,"/api/chat.deleteScheduledMessage", {
         scheduled_message_id: scheduledMessageId,
         channel: channel
     });
@@ -40,12 +40,25 @@ async function deleteScheduledMessage(token, channel, scheduledMessageId) {
     }
 }
  
-const getOptions = (token, path) => {
+async function getChannelsFromUser(token) {
+    const response = await request("GET",token,"/api/conversations.list?types=public_channel,private_channel", {});
+    if(response.statusCode == 200){
+        const parsedBody = JSON.parse(response.result);
+        if(parsedBody.ok){
+            return parsedBody.channels
+        }
+
+    }else{
+        return null;
+    }
+}
+
+const getOptions = (method, token, path) => {
     return {
       hostname: "slack.com",
       port: 443,
       path: path,
-      method: "POST",
+      method: method,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Authorization: `Bearer ${token}`,
@@ -53,7 +66,8 @@ const getOptions = (token, path) => {
     };
   };
   
-function post(token, path, message){
+  
+  function request(method, token, path, message){
     return new Promise((resolve, reject) => {
       const payload = JSON.stringify(message);
   
@@ -82,7 +96,6 @@ function post(token, path, message){
       req.end();
     });
   };
-  
-  
-  module.exports = { sendMessage, getScheduledMessages, deleteScheduledMessage}
+
+  module.exports = { sendMessage, getScheduledMessages, deleteScheduledMessage, getChannelsFromUser}
 //   module.exports = sendMessage;
