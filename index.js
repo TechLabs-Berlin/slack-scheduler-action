@@ -19,28 +19,32 @@ function convertChannelNameToId(channel, channels){
     return null;
 }
 
-//todo make proper async
-try {    
-    const messageFilePath = core.getInput("message-file");
-    const messages = yaml.load(fs.readFileSync(messageFilePath, 'utf8'));
+async function main(){
+    //todo make proper async
+    try {    
+        const messageFilePath = core.getInput("message-file");
+        const messages = yaml.load(fs.readFileSync(messageFilePath, 'utf8'));
 
 
-    const token = core.getInput('slack-user-oauth-access-token');
+        const token = core.getInput('slack-user-oauth-access-token');
 
-    setup.deleteAllScheduledMessages(token);
+        setup.deleteAllScheduledMessages(token);
 
-    const channels = slack.getChannelsFromUser(token);
+        const channels = await slack.getChannelsFromUser(token);
 
 
 
-    for(let message of  messages){
-        const messageBuilded = messageBuilder(convertChannelNameToId(message.channel, channels), message.text, message.post_at);
-        const result = slack.sendMessage(token,messageBuilded);
-        //TODO put in proper error handling
+        for(let message of  messages){
+            const messageBuilded = messageBuilder(convertChannelNameToId(message.channel, channels), message.text, message.post_at);
+            const result = slack.sendMessage(token,messageBuilded);
+            //TODO put in proper error handling
+        }
+        // TODO Output scheduled messages
+        // `who-to-greet` input defined in action metadata file
+    
+    } catch (error) {
+        core.setFailed(error.message);
     }
-    // TODO Output scheduled messages
-    // `who-to-greet` input defined in action metadata file
-  
-} catch (error) {
-    core.setFailed(error.message);
 }
+
+main();

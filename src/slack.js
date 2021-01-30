@@ -42,6 +42,7 @@ async function deleteScheduledMessage(token, channel, scheduledMessageId) {
  
 async function getChannelsFromUser(token) {
     const response = await request("GET",token,"/api/conversations.list?types=public_channel,private_channel", {});
+    console.log(response);
     if(response.statusCode == 200){
         const parsedBody = JSON.parse(response.result);
         if(parsedBody.ok){
@@ -71,7 +72,7 @@ const getOptions = (method, token, path) => {
     return new Promise((resolve, reject) => {
       const payload = JSON.stringify(message);
   
-      const options = getOptions(token, path);
+      const options = getOptions(method, token, path);
   
       const req = https.request(options, (res) => {
         const chunks = [];
