@@ -3,15 +3,16 @@ const github = require('@actions/github');
 const messageBuilder = require('./src/message-builder')
 const slack = require('./src/slack')
 const fs = require('fs');
+const yaml = require('js-yaml');
 
 const setup = require('./setup')
 
 
 //todo make proper async
-try {
+try {    
     const messageFilePath = core.getInput("message-file");
-    let rawdata = fs.readFileSync(messageFilePath);
-    let messages = JSON.parse(rawdata);
+    const messages = yaml.load(fs.readFileSync(messageFilePath, 'utf8'));
+
 
     const token = core.getInput('slack-user-oauth-access-token');
 
