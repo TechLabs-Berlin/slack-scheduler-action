@@ -5,6 +5,12 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+  slack-user-oauth-access-token:
+    description: "User OAuth Access Token"
+    required: true
+  message-file:
+    description: "File with messages to be send"
+    required: true
 outputs:
   time: # id of output
     description: 'The time we greeted you'

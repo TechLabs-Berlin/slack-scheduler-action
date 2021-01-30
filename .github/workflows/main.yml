@@ -14,6 +14,8 @@ jobs:
         id: hello
         with:
           who-to-greet: 'Mona the Octocat'
+          slack-user-oauth-access-token: '${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN }}'
+          message-file: 'messages.json'
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
