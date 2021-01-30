@@ -10,14 +10,14 @@ try {
     let rawdata = fs.readFileSync(messageFilePath);
     let messages = JSON.parse(rawdata);
 
- // TODO GET SETUP (TOKENS)
+// TODO GET SETUP (TOKENS)
     const token = core.getInput('slack-user-oauth-access-token');
 
     const nameToGreet = core.getInput('who-to-greet');
 
  // TODO PARSE
     for(let message of  messages){
-        const messageBuilded = messageBuilder(message.channel, message.text);
+        const messageBuilded = messageBuilder(message.channel, message.text, message.post_at);
         const result = slack(token,messageBuilded);
     }
 
@@ -25,6 +25,7 @@ try {
     
     
 
+ // TODO Output scheduled messages
   // `who-to-greet` input defined in action metadata file
   
 //   console.log(`Hello ${nameToGreet}!`);

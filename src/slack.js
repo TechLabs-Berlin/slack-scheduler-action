@@ -4,7 +4,7 @@ const getOptions = (token) => {
     return {
       hostname: "slack.com",
       port: 443,
-      path: "/api/chat.postMessage",
+      path: "/api/chat.scheduleMessage",
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",

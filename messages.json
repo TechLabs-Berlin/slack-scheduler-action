@@ -1,10 +1,7 @@
 [
     {
         "channel":  "C01L5KHRTQD",
-        "text": "Hello, World 2"
-    },
-    {
-        "channel":  "C01L5KHRTQD",
-        "text": "Hello, World 3"
+        "text": "Hello, World 4",
+        "post_at": "2021-01-30T11:40:00+02:00"
     }
 ]
