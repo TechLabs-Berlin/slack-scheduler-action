@@ -41,17 +41,20 @@ async function deleteScheduledMessage(token, channel, scheduledMessageId) {
 }
  
 async function getChannelsFromUser(token) {
-    const response = await request("GET",token,"/api/conversations.list?types=public_channel,private_channel", {});
-    console.log(response);
-    if(response.statusCode == 200){
+    let channelList = [];
+    let nextToken = "";
+    do{
+      const response = await request("GET",token,`/api/conversations.list?types=public_channel,private_channel&cursor=${nextToken}`, {});
+      nextToken = "";
+      if(response.statusCode == 200){
         const parsedBody = JSON.parse(response.result);
-        if(parsedBody.ok){
-            return parsedBody.channels
-        }
+        channelList.push(...parsedBody.channels);
+        nextToken = parsedBody.response_metadata.next_cursor;
+      }
 
-    }else{
-        return null;
-    }
+    }while(nextToken.length > 1)
+
+    return channelList;
 }
 
 const getOptions = (method, token, path) => {
