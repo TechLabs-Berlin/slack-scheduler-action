@@ -1,3 +1,18 @@
+- text: |
+    *Hey Techies*,
+
+    :rocket: I am happy that the first people already started our DS Accelerator :rocket: We just wanted to fish you happy learning as a team and hope everyone will have a great time and learn! :datascience: 
+  post_at: "2021-02-15T21:00+01:00"
+  channel: "G01LXNY9F6J"
+
+- text: |
+    *Hey Techies*,
+    Data Visualization is a big part of Data Science. While we will already cover it, I just found this nice article about **Data Story Visualization: A Decision Tree**. [Link to the article](https://www.kdnuggets.com/2021/02/telling-great-data-story-visualization-decision-tree.html) :datascience: 
+
+    Wish you all a nice evening
+ 
+  post_at: "2021-02-15T17:12+01:00"
+  channel: "G01LXNY9F6J"
 
 - text: |
     :muscle: *Motivation Wednesdays*
@@ -6,10 +21,7 @@
     > -  Ira Glass
 
     Keep it up :muscle: !
-  post_at: "2021-01-30T13:21:00+01:00"
-  channel: "random"
+  post_at: "2021-02-17T17:21:00+01:00"
+  channel: "G01LXNY9F6J"
 
 
-- text: write some
-  post_at: "2021-01-30T13:08:00+01:00"
-  channel: "test"
