@@ -1,21 +1,16 @@
 on: [push]
 
 jobs:
-  hello_world_job:
+  slack_message_scheduling_job:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Slack Message Scheduling Step
     steps:
       # To use this repository's private action,
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Hello world action step
+      - name: Slack Message Scheduling Step
         uses: ./ # Uses an action in the root directory
-        id: hello
         with:
-          who-to-greet: 'Mona the Octocat'
           slack-user-oauth-access-token: '${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN }}'
           message-file: 'messages.yaml'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
