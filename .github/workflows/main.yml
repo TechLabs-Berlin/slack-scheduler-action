@@ -12,5 +12,7 @@ jobs:
       - name: Slack Message Scheduling Step
         uses: ./ # Uses an action in the root directory
         with:
-          slack-user-oauth-access-token: '${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN }}'
+          slack-user-oauth-access-token: '{
+            "max": "${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN }}"
+            }'
           message-file: 'messages.yaml'

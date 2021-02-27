@@ -4,14 +4,16 @@ const core = require('@actions/core');
 const slack = require('./src/slack')
 //TODO Delete all scheduled messages from token
 
-async function deleteAllScheduledMessages(token){
-    const scheduledMessages = await slack.getScheduledMessages(token);    
-    for(let message of scheduledMessages){
-        slack.deleteScheduledMessage(token, message.channel_id, message.id);
+async function deleteAllScheduledMessages(userTokens) {
+    for (let key in userTokens) {
+        const token = userTokens[key];
+        const scheduledMessages = await slack.getScheduledMessages(token);
+        for (let message of scheduledMessages) {
+            slack.deleteScheduledMessage(token, message.channel_id, message.id);
+        }
     }
 }
-
 // const token = core.getInput('slack-user-oauth-access-token');
 
-module.exports = {deleteAllScheduledMessages}
+module.exports = { deleteAllScheduledMessages }
 // deleteAllScheduledMessages(token);

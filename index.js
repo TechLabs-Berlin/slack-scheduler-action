@@ -7,41 +7,53 @@ const yaml = require('js-yaml');
 
 const setup = require('./setup')
 
-function convertChannelNameToId(channel, channels){
-    for(let c of channels){
-        if(c.id == channel){
+function convertChannelNameToId(channel, channels) {
+    for (let c of channels) {
+        if (c.id == channel) {
             return channel;
         }
-        if(c.name == channel){
+        if (c.name == channel) {
             return c.id;
         }
     }
     return null;
 }
 
-async function main(){
+function parseUserTokens(input) {
+    if (input.trim().startsWith("xoxp-")) {
+        return { "default": input.trim() };
+    } else {
+        return JSON.parse(core.getInput('slack-user-oauth-access-token'));
+    }
+}
+
+async function main() {
     //todo make proper async
-    try {    
+    try {
         const messageFilePath = core.getInput("message-file");
         const messages = yaml.load(fs.readFileSync(messageFilePath, 'utf8'));
 
 
-        const token = core.getInput('slack-user-oauth-access-token');
-
-        setup.deleteAllScheduledMessages(token);
-
-        const channels = await slack.getChannelsFromUser(token);
+        const userTokens = parseUserTokens(core.getInput('slack-user-oauth-access-token'));
 
 
+        setup.deleteAllScheduledMessages(userTokens);
 
-        for(let message of  messages){
+        const userChannels = await slack.getChannelsFromUser(userTokens);
+
+
+
+        for (let message of messages) {
+            const user = message.user || "default";
+            const channels = userChannels[user];
+            const token = userTokens[user];
             const messageBuilded = messageBuilder(convertChannelNameToId(message.channel, channels), message.text, message.post_at);
-            const result = slack.sendMessage(token,messageBuilded);
+            const result = slack.sendMessage(token, messageBuilded);
             //TODO put in proper error handling
         }
         // TODO Output scheduled messages
         // `who-to-greet` input defined in action metadata file
-    
+
     } catch (error) {
         core.setFailed(error.message);
     }

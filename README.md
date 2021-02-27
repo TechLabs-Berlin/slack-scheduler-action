@@ -8,7 +8,21 @@ This action wraps the [chat.scheduleMessage](https://api.slack.com/methods/chat.
 
 ### `slack-user-oauth-access-token`
 
-**Required** The user-token of the user to post.
+**Required** The user-token of the user to post. Can either be a JSON for multi-user support, or just the token for single-user usage, which will map to the user `default`
+
+**Example of json usage**
+```json
+slack-user-oauth-access-token: '{
+  "max": "${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN_MAX }}",
+  "merlin":  "${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN_MERLIN }}"
+}'
+```
+
+**Warning!**
+
+The action requires for every message a specified token. So if you don`t have a default user, every message needs a defined user.
+
+
 
 ### `message-file`
 
@@ -22,7 +36,7 @@ This action wraps the [chat.scheduleMessage](https://api.slack.com/methods/chat.
     :rocket: I am happy that the first people already started our program!
   post_at: "2021-02-15T21:18+01:00"
   channel: "G01LXNY9F6J" # Channel-ID or Channel-Name
-
+  user: "max" # Optional, if none is specified the message will be send with the token of the default user
 - text: |
     *Hey everyone*,
 
