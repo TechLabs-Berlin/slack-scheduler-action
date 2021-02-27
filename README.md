@@ -30,7 +30,7 @@ The action requires for every message a specified token. So if you don`t have a 
 
 **Example Yaml File**
 ```yaml
-- text: |
+- text: | 
     *Hey,*,
 
     :rocket: I am happy that the first people already started our program!
@@ -45,6 +45,9 @@ The action requires for every message a specified token. So if you don`t have a 
   post_at: "2021-02-16T17:12+01:00"
   channel: "general" # Channel-ID or Channel-Name
 ```
+
+**Text-format**
+We use [Slackify-Markdown](https://github.com/jsarafajr/slackify-markdown) to convert markdown in text to the slack-specific format.
 <!-- 
 ## Example usage
 
