@@ -30,7 +30,6 @@ function parseUserTokens(input) {
 async function main() {
     //todo make proper async
     try {
-        // TODO Implement multi-file
         const messageFilePaths = core.getInput("message-file").split(";");
         const messages = [];
         for (let messageFilePath of messageFilePaths) {
@@ -52,6 +51,7 @@ async function main() {
             const user = message.user || "default";
             const channels = userChannels[user];
             const token = userTokens[user];
+            // TODO Implement proper handling of markdown to slack-markdown https://github.com/jsarafajr/slackify-markdown
             const messageBuilded = messageBuilder(convertChannelNameToId(message.channel, channels), message.text, message.post_at);
             const result = slack.sendMessage(token, messageBuilded);
             //TODO put in proper error handling

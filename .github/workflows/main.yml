@@ -13,6 +13,6 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           slack-user-oauth-access-token: '{
-            "max": "${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN }}"
+            "max": "${{ secrets.SLACK_USER_OAUTH_ACCESS_TOKEN_MAX}}"
             }'
           message-file: 'messages.yaml'
