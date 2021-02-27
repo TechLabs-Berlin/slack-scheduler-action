@@ -30,13 +30,18 @@ function parseUserTokens(input) {
 async function main() {
     //todo make proper async
     try {
-        const messageFilePath = core.getInput("message-file");
-        const messages = yaml.load(fs.readFileSync(messageFilePath, 'utf8'));
+        // TODO Implement multi-file
+        const messageFilePaths = core.getInput("message-file").split(";");
+        const messages = [];
+        for (let messageFilePath of messageFilePaths) {
+            messages.push(...yaml.load(fs.readFileSync(messageFilePath, 'utf8')));
+        }
 
 
         const userTokens = parseUserTokens(core.getInput('slack-user-oauth-access-token'));
 
 
+        // TODO check first if everything is defined properly (Every channel is properly specified, every user is properly specified and has permissions)
         setup.deleteAllScheduledMessages(userTokens);
 
         const userChannels = await slack.getChannelsFromUser(userTokens);

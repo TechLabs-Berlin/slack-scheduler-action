@@ -26,7 +26,7 @@ The action requires for every message a specified token. So if you don`t have a 
 
 ### `message-file`
 
-**Required** The yaml-file which specifies the message, the channel and the datetime to post it.
+**Required** The yaml-file which specifies the message, the channel and the datetime to post it. To specify multiple files, seperate them with a `;`
 
 **Example Yaml File**
 ```yaml
