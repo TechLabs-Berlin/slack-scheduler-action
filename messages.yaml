@@ -1,8 +1,8 @@
 - text: |
     *Hey Techies*,
 
-    :rocket: I am happy that the first people already started our DS Accelerator :rocket: We just wanted to wish you happy learning as a team and hope everyone will have a great time! :datascience: 
-  post_at: "2021-02-27T14:25+01:00"
+    :rocket: I am happy that the first people already started our DS Accelerator :rocket: We just wanted to wish you happy learning as a team and hope everyone will have a great time! :datascience:
+  post_at: "2021-03-16T18:37+01:00"
   channel: "scheduler_test"
   user: "max"
 
@@ -11,7 +11,7 @@
     Data Visualization is a big part of Data Science. While we will already cover it, I just found this nice article about **Data Story Visualization: A Decision Tree**. [Link to the article](https://www.kdnuggets.com/2021/02/telling-great-data-story-visualization-decision-tree.html) :datascience: 
 
     Wish you all a nice evening
- 
+
   post_at: "2021-02-27T14:25+01:00"
   channel: "scheduler_test"
   user: "max"
@@ -26,5 +26,3 @@
   post_at: "2021-02-27T14:25:00+01:00"
   channel: "scheduler_test"
   user: "max"
-
-
