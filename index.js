@@ -14,10 +14,12 @@ async function main() {
     try {
         const messageFilePaths = parseMessageFileInput(core.getInput("message-file"));
 
+        console.log(`${messageFilePaths.length} files found`);
         const messages = loadMessage(messageFilePaths);
 
         const userTokens = parseUserTokens(core.getInput('slack-user-oauth-access-token'));
 
+        console.log(`${Object.keys(userTokens)} found as user`);
         const userChannels = await slack.getChannelsFromUser(userTokens);
 
         //TODO Change from implizit fail to explizit fail by collecting all failures and printing them before existing
@@ -36,7 +38,7 @@ async function main() {
         // TODO Output scheduled messages        
 
     } catch (error) {
-        core.setFailed(error.message);
+        core.setFailed(error);
     }
 }
 
