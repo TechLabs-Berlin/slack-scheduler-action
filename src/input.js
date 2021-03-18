@@ -5,7 +5,7 @@ function parseUserTokens(input) {
     if (input.trim().startsWith("xoxp-")) {
         return { "default": input.trim() };
     } else {
-        return JSON.parse(core.getInput('slack-user-oauth-access-token'));
+        return JSON.parse(input);
     }
 }
 
