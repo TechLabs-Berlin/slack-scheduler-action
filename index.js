@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const { messageBuilder, areMessagesCorrect } = require('./src/message-builder')
+const { buildMessage, areMessagesCorrect, convertChannelNameToId } = require('./src/message-builder')
 const { parseUserTokens, parseMessageFileInput, loadMessage } = require('./src/input')
 const slack = require('./src/slack')
 const setup = require('./setup')
@@ -31,7 +31,7 @@ async function main() {
             const user = message.user || "default";
             const channels = userChannels[user];
             const token = userTokens[user];
-            const messageBuilded = messageBuilder(convertChannelNameToId(message.channel, channels), message.text, message.post_at);
+            const messageBuilded = buildMessage(convertChannelNameToId(message.channel, channels), message.text, message.post_at);
             const result = slack.sendMessage(token, messageBuilded);
             //TODO put in proper error handling
         }

@@ -24,6 +24,8 @@ function convertChannelNameToId(channel, channels) {
 
 
 function areMessagesCorrect(messages, userChannels, users) {
+    users = Object.keys(users).concat(["default"])
+
     for (let message of messages) {
         checkField(message, "text")
         checkField(message, "post_at")
@@ -34,8 +36,8 @@ function areMessagesCorrect(messages, userChannels, users) {
         } catch (e) {
             throw `${e} in file ${message.file}`;
         }
-        users = Object.keys(users).concat(["default"])
-        // CHECK IF HAS USER || DEFAULT AND IF USER EXISTS
+
+        // CHECK IF HAS USER || DEFAULT AND IF USER EXISTS        
         const user = message.user || "default";
         if (!users.includes(user)) {
             throw `${user} is not found in token list in a message in file ${message.file}`
@@ -48,4 +50,4 @@ function areMessagesCorrect(messages, userChannels, users) {
     }
 }
 
-module.exports = { buildMessage, areMessagesCorrect };
+module.exports = { buildMessage, areMessagesCorrect, convertChannelNameToId };

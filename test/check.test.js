@@ -48,6 +48,24 @@ test('Check Correct Messages Formatting', () => {
     areMessagesCorrect(messages, userChannels, userTokens);
 })
 
+test('Check Correct Messages Formatting', () => {
+    const messages = generateCorrectMessages().concat(generateCorrectMessages());
+    const userChannels = {
+        "max": [
+            {
+                id: "test",
+                name: "scheduler_test"
+            }
+        ]
+    };
+
+    const userTokens = {
+        "max": "test"
+
+    };
+    areMessagesCorrect(messages, userChannels, userTokens);
+})
+
 test('Check Wrong Messages Formatting', () => {
     const messages = generateWrongMessages();
     const userChannels = {
