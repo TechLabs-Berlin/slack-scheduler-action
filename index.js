@@ -23,7 +23,7 @@ async function main() {
         const userChannels = await slack.getChannelsFromUser(userTokens);
 
         //TODO Change from implizit fail to explizit fail by collecting all failures and printing them before existing
-        areMessagesCorrect(messages, userChannels, Object.keys(userTokens));
+        areMessagesCorrect(messages, userChannels, userTokens);
 
         setup.deleteAllScheduledMessages(userTokens);
 
