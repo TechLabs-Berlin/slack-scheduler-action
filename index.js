@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const { buildMessage, areMessagesCorrect, convertChannelNameToId } = require('./src/message-builder')
-const { parseUserTokens, parseMessageFileInput, loadMessage } = require('./src/input')
+const { parseUserTokens, checkUserTokens, parseMessageFileInput, loadMessage } = require('./src/input')
 const slack = require('./src/slack')
 const setup = require('./setup')
 
@@ -19,6 +19,7 @@ async function main() {
         const messages = loadMessage(messageFilePaths);
 
         const userTokens = parseUserTokens(core.getInput('slack-user-oauth-access-token'));
+        checkUserTokens(userTokens)
 
         console.log(`${Object.keys(userTokens)} found as user`);
         const userChannels = await slack.getChannelsFromUser(userTokens);
@@ -47,7 +48,7 @@ async function main() {
 
         for (let result of results) {
             try {
-            
+
                 let r = await result;
                 console.log(r);
             } catch (error) {

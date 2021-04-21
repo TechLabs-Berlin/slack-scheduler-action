@@ -45,7 +45,7 @@ function areMessagesCorrect(messages, userChannels, users) {
         const channels = userChannels[user];
 
         if (convertChannelNameToId(message.channel, channels) == null) {
-            throw "Channel not found for message";
+            throw `Channel ${message.channel} not found for message in file ${message.file}`;
         }
     }
 }

@@ -9,6 +9,15 @@ function parseUserTokens(input) {
     }
 }
 
+function checkUserTokens(users) {
+    for (let user in users) {
+        const token = users[user];
+        if (!token.trim().startsWith("xoxp-")) {
+            throw `${user} did not provide a proper access token`;
+        }
+    }
+}
+
 function parseMessageFileInput(input) {
     return input.split(";");
 }
@@ -25,4 +34,4 @@ function loadMessage(filepaths) {
     return messages;
 }
 
-module.exports = { parseUserTokens, parseMessageFileInput, loadMessage }
+module.exports = { parseUserTokens, checkUserTokens, parseMessageFileInput, loadMessage }
