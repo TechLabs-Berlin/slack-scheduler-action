@@ -19,7 +19,10 @@ async function main() {
         const messages = loadMessage(messageFilePaths);
 
         const userTokens = parseUserTokens(core.getInput('slack-user-oauth-access-token'));
-        checkUserTokens(userTokens)
+
+        const workspaceId = core.getInput('slack-workspace-id');
+        const workspaceIdConverted = workspaceId === '' ? null : workspaceId;
+        checkUserTokens(userTokens, workspaceIdConverted)
 
         console.log(`${Object.keys(userTokens)} found as user`);
         const userChannels = await slack.getChannelsFromUser(userTokens);

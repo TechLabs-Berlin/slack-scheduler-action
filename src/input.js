@@ -9,11 +9,18 @@ function parseUserTokens(input) {
     }
 }
 
-function checkUserTokens(users) {
+function checkUserTokens(users, workspaceId = null) {
     for (let user in users) {
         const token = users[user];
         if (!token.trim().startsWith("xoxp-")) {
             throw `${user} did not provide a proper access token`;
+        }
+        if (workspaceId) {
+            const beginnIndex = 5;
+            const userWorkspaceToken = token.substring(beginnIndex, beginnIndex + workspaceId.length)
+            if (userWorkspaceToken !== workspaceId) {
+                throw `${user} did provide a correct access token, but from the wrong workspace!`;
+            }
         }
     }
 }

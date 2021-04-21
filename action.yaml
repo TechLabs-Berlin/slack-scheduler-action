@@ -11,6 +11,9 @@ inputs:
   message-file:
     description: "File with messages to be send"
     required: true
+  slack-workspace-id:
+    description: "If provided it checks the given user tokens if they are from the workspace id"
+    required: false
 outputs:
   time: # id of output
     description: "The time we greeted you"
