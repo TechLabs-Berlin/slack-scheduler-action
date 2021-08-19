@@ -22,21 +22,20 @@ function convertChannelNameToId(channel, channels) {
     return null;
 }
 //* Repeats weekly (+ 7 ). 
-function incrimentDateIterative(dateObj, endDate) {
+function incrimentDateIterative(startDate, endDate) {
     
-    dateObj = new Date(dateObj) 
+    startDate = new Date(startDate) 
     endDate = new Date(endDate)
     let dateList = []
     let date
    
-    while (dateObj !== endDate && dateObj < endDate) {     
-      date = new Date(dateObj.setDate(dateObj.getDate() + 7));      
+    while (startDate !== endDate && startDate < endDate) {     
+      date = new Date(startDate.setDate(startDate.getDate() + 7));      
       dateList.push(date)
         
     } 
     return dateList;
   }
-  
 function buildRepeatMessages(messages){
 allMessages = []
 
@@ -55,7 +54,7 @@ for (let i=0; i<messages.length; i++){
                 user:messages[i].user,
             })
         }
-        
+        //* .yaml objects without the repeat property
     } if(!messages[i].repeat){
         allMessages.push(messages[i])
     }
