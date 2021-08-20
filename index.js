@@ -26,9 +26,9 @@ async function main() {
     );
 
     console.log(`${messageFilePaths.length} files found`);
-    var messages = loadMessage(messageFilePaths);
-    messages = buildRepeatMessages(messages);
-    console.log(messages);
+    const messages = loadMessage(messageFilePaths);
+    const allMessages = buildRepeatMessages(messages);
+
     const userTokens = parseUserTokens(
       core.getInput("slack-user-oauth-access-token")
     );
@@ -41,13 +41,13 @@ async function main() {
     const userChannels = await slack.getChannelsFromUser(userTokens);
 
     //TODO Change from implizit fail to explizit fail by collecting all failures and printing them before existing
-    areMessagesCorrect(messages, userChannels, userTokens);
+    areMessagesCorrect(allMessages, userChannels, userTokens);
 
     setup.deleteAllScheduledMessages(userTokens);
 
     const results = [];
-    console.log(messages);
-    for (let message of messages) {
+
+    for (let message of allMessages) {
       const user = message.user || "default";
       const channels = userChannels[user];
       const token = userTokens[user];
