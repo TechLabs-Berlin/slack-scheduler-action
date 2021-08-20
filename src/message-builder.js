@@ -36,8 +36,8 @@ function convertChannelNameToId(channel, channels) {
 }
 
 function incrimentDateIterative(startDate, endDate) {
-  let dateList = [];
   let date = startDate;
+  let dateList = [date];
 
   while (date < endDate) {
     date = new Date(date.setDate(date.getDate() + 7));
@@ -81,6 +81,7 @@ function areMessagesCorrect(messages, userChannels, users) {
   stringToDateConverter(messages);
 
   messages = buildRepeatMessages(messages);
+
   for (let message of messages) {
     checkField(message, "text");
     checkField(message, "post_at");
