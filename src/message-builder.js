@@ -13,6 +13,15 @@ function checkField(message, key) {
     throw `${key} is missing in a message in ${message.file}`;
   }
 }
+function stringToDateConverter(messages) {
+  for (let message of messages) {
+    message.post_at = new Date(message.post_at);
+    if (message.repeat) {
+      message.repeat = new Date(message.repeat);
+    }
+  }
+  return messages;
+}
 
 function convertChannelNameToId(channel, channels) {
   for (let c of channels) {
@@ -27,8 +36,6 @@ function convertChannelNameToId(channel, channels) {
 }
 
 function incrimentDateIterative(startDate, endDate) {
-  startDate = new Date(startDate);
-  endDate = new Date(endDate);
   let dateList = [];
   let date = startDate;
 
@@ -38,11 +45,11 @@ function incrimentDateIterative(startDate, endDate) {
   }
   return dateList;
 }
+
 function buildRepeatMessages(messages) {
   allMessages = [];
 
   for (let i = 0; i < messages.length; i++) {
-    //* added an optional property 'repeat' to the .yaml objects
     if (messages[i].repeat) {
       const dates = incrimentDateIterative(
         messages[i].post_at,
@@ -50,7 +57,7 @@ function buildRepeatMessages(messages) {
       );
       //TODO figure out how to modify indv object properties, instead of rebuilding it
       //! problem: modyfying indv object changed *all* object properties to be uniform
-      //*Get rid of 'repeat' proterty
+      //*This also gets rid of 'repeat' proterty
       for (let j = 0; j < dates.length; j++) {
         allMessages.push({
           channel: messages[i].channel,
@@ -60,7 +67,6 @@ function buildRepeatMessages(messages) {
           user: messages[i].user,
         });
       }
-      //* .yaml objects without the repeat property
     } else {
       allMessages.push(messages[i]);
     }
@@ -71,6 +77,8 @@ function buildRepeatMessages(messages) {
 
 function areMessagesCorrect(messages, userChannels, users) {
   users = Object.keys(users).concat(["default"]);
+
+  stringToDateConverter(messages);
 
   messages = buildRepeatMessages(messages);
   for (let message of messages) {
