@@ -48,6 +48,7 @@ function incrimentDateIterative(startDate, endDate) {
 }
 
 function buildRepeatMessages(messages) {
+  messages = stringToDateConverter(messages);
   allMessages = [];
 
   for (let i = 0; i < messages.length; i++) {
@@ -61,27 +62,26 @@ function buildRepeatMessages(messages) {
       //*This also gets rid of 'repeat' proterty
       for (let j = 0; j < dates.length; j++) {
         allMessages.push({
-          channel: messages[i].channel,
-          file: messages[i].file,
-          post_at: dates[j],
           text: messages[i].text,
+          post_at: dates[j],
+          channel: messages[i].channel,
           user: messages[i].user,
+          file: messages[i].file,
         });
       }
     } else {
       allMessages.push(messages[i]);
     }
   }
-
+  console.log(allMessages);
   return allMessages;
 }
 
 function areMessagesCorrect(messages, userChannels, users) {
   users = Object.keys(users).concat(["default"]);
 
-  stringToDateConverter(messages);
-
-  messages = buildRepeatMessages(messages);
+  //messages = buildRepeatMessages(messages);
+  //console.log(messages);
 
   for (let message of messages) {
     checkField(message, "text");
@@ -105,6 +105,12 @@ function areMessagesCorrect(messages, userChannels, users) {
       throw `Channel ${message.channel} not found for message in file ${message.file}`;
     }
   }
+  console.log(messages);
 }
 
-module.exports = { buildMessage, areMessagesCorrect, convertChannelNameToId };
+module.exports = {
+  buildMessage,
+  areMessagesCorrect,
+  convertChannelNameToId,
+  buildRepeatMessages,
+};
