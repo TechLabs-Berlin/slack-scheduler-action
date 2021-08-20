@@ -61,8 +61,7 @@ function buildRepeatMessages(messages) {
         });
       }
       //* .yaml objects without the repeat property
-    }
-    if (!messages[i].repeat) {
+    } else {
       allMessages.push(messages[i]);
     }
   }
