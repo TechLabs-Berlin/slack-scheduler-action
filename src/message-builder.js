@@ -36,13 +36,14 @@ function convertChannelNameToId(channel, channels) {
 }
 
 function incrimentDateIterative(startDate, endDate) {
-  let date = startDate;
-  let dateList = [date];
+  let date = new Date(startDate);
+  let dateList = [];
 
   while (date < endDate) {
-    date = new Date(date.setDate(date.getDate() + 7));
     dateList.push(date);
+    date = new Date(startDate.setDate(startDate.getDate() + 7));
   }
+
   return dateList;
 }
 
