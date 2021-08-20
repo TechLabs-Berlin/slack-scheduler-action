@@ -73,15 +73,12 @@ function buildRepeatMessages(messages) {
       allMessages.push(messages[i]);
     }
   }
-  console.log(allMessages);
+
   return allMessages;
 }
 
 function areMessagesCorrect(messages, userChannels, users) {
   users = Object.keys(users).concat(["default"]);
-
-  //messages = buildRepeatMessages(messages);
-  //console.log(messages);
 
   for (let message of messages) {
     checkField(message, "text");
@@ -105,7 +102,6 @@ function areMessagesCorrect(messages, userChannels, users) {
       throw `Channel ${message.channel} not found for message in file ${message.file}`;
     }
   }
-  console.log(messages);
 }
 
 module.exports = {
