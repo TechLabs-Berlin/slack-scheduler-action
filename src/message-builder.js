@@ -1,98 +1,101 @@
-const slackifyMarkdown = require('slackify-markdown');
+const slackifyMarkdown = require("slackify-markdown");
 
 const buildMessage = (channel, text, time) => {
-    return { channel: channel, text: slackifyMarkdown(text), post_at: Date.parse(time) / 1000 }
-}
+  return {
+    channel: channel,
+    text: slackifyMarkdown(text),
+    post_at: Date.parse(time) / 1000,
+  };
+};
 
 function checkField(message, key) {
-    if (!message[key]) {
-        throw `${key} is missing in a message in ${message.file}`
-    }
+  if (!message[key]) {
+    throw `${key} is missing in a message in ${message.file}`;
+  }
 }
 
 function convertChannelNameToId(channel, channels) {
-    for (let c of channels) {
-        if (c.id == channel) {
-            return channel;
-        }
-        if (c.name == channel) {
-            return c.id;
-        }
+  for (let c of channels) {
+    if (c.id == channel) {
+      return channel;
     }
-    return null;
-}
-//* Repeats weekly (+ 7 ). 
-function incrimentDateIterative(startDate, endDate) {
-    
-    startDate = new Date(startDate) 
-    endDate = new Date(endDate)
-    let dateList = []
-    let date
-   
-    while (startDate !== endDate && startDate < endDate) {     
-      date = new Date(startDate.setDate(startDate.getDate() + 7));      
-      dateList.push(date)
-        
-    } 
-    return dateList;
+    if (c.name == channel) {
+      return c.id;
+    }
   }
-function buildRepeatMessages(messages){
-allMessages = []
-
-for (let i=0; i<messages.length; i++){
-    //* added an optional property 'repeat' to the .yaml objects
-    if(messages[i].repeat){
-        const dates = incrimentDateIterative(messages[i].post_at, messages[i].repeat);
-        //TODO figure out how to modify indv object properties, instead of rebuilding it
-        //! problem: modyfying indv object changed *all* object properties to be uniform
-        for(let j=0; j<dates.length; j++){
-            allMessages.push({
-                channel: messages[i].channel,
-                file:messages[i].file,
-                post_at:dates[j],    
-                text:messages[i].text,
-                user:messages[i].user,
-            })
-        }
-        //* .yaml objects without the repeat property
-    } if(!messages[i].repeat){
-        allMessages.push(messages[i])
-    }
-    
-
-
-    
+  return null;
 }
 
-return allMessages
-} 
+function incrimentDateIterative(startDate, endDate) {
+  startDate = new Date(startDate);
+  endDate = new Date(endDate);
+  let dateList = [];
+  let date = startDate;
+
+  while (date < endDate) {
+    date = new Date(date.setDate(date.getDate() + 7));
+    dateList.push(date);
+  }
+  return dateList;
+}
+function buildRepeatMessages(messages) {
+  allMessages = [];
+
+  for (let i = 0; i < messages.length; i++) {
+    //* added an optional property 'repeat' to the .yaml objects
+    if (messages[i].repeat) {
+      const dates = incrimentDateIterative(
+        messages[i].post_at,
+        messages[i].repeat
+      );
+      //TODO figure out how to modify indv object properties, instead of rebuilding it
+      //! problem: modyfying indv object changed *all* object properties to be uniform
+      //*Get rid of 'repeat' proterty
+      for (let j = 0; j < dates.length; j++) {
+        allMessages.push({
+          channel: messages[i].channel,
+          file: messages[i].file,
+          post_at: dates[j],
+          text: messages[i].text,
+          user: messages[i].user,
+        });
+      }
+      //* .yaml objects without the repeat property
+    }
+    if (!messages[i].repeat) {
+      allMessages.push(messages[i]);
+    }
+  }
+
+  return allMessages;
+}
 
 function areMessagesCorrect(messages, userChannels, users) {
-    users = Object.keys(users).concat(["default"])
+  users = Object.keys(users).concat(["default"]);
 
-    messages = buildRepeatMessages(messages)
-    for (let message of messages) {
-        checkField(message, "text")
-        checkField(message, "post_at")
-        checkField(message, "channel")
-        
-        try {
-            Date.parse(message.post_at)
-        } catch (e) {
-            throw `${e} in file ${message.file}`;
-        }
+  messages = buildRepeatMessages(messages);
+  for (let message of messages) {
+    checkField(message, "text");
+    checkField(message, "post_at");
+    checkField(message, "channel");
 
-        // CHECK IF HAS USER || DEFAULT AND IF USER EXISTS        
-        const user = message.user || "default";
-        if (!users.includes(user)) {
-            throw `${user} is not found in token list in a message in file ${message.file}`
-        }
-        const channels = userChannels[user];
-
-        if (convertChannelNameToId(message.channel, channels) == null) {
-            throw `Channel ${message.channel} not found for message in file ${message.file}`;
-        }
+    try {
+      Date.parse(message.post_at);
+    } catch (e) {
+      throw `${e} in file ${message.file}`;
     }
+
+    // CHECK IF HAS USER || DEFAULT AND IF USER EXISTS
+    const user = message.user || "default";
+    if (!users.includes(user)) {
+      throw `${user} is not found in token list in a message in file ${message.file}`;
+    }
+    const channels = userChannels[user];
+
+    if (convertChannelNameToId(message.channel, channels) == null) {
+      throw `Channel ${message.channel} not found for message in file ${message.file}`;
+    }
+  }
 }
 
 module.exports = { buildMessage, areMessagesCorrect, convertChannelNameToId };
