@@ -48,7 +48,6 @@ function incrimentDateIterative(startDate, endDate) {
 }
 
 function buildRepeatMessages(messages) {
-  messages = stringToDateConverter(messages);
   allMessages = [];
 
   for (let i = 0; i < messages.length; i++) {
@@ -57,8 +56,7 @@ function buildRepeatMessages(messages) {
         messages[i].post_at,
         messages[i].repeat
       );
-      //TODO figure out how to modify indv object properties, instead of rebuilding it
-      //! problem: modyfying indv object changed *all* object properties to be uniform
+
       //*This also gets rid of 'repeat' proterty
       for (let j = 0; j < dates.length; j++) {
         allMessages.push({
@@ -85,8 +83,10 @@ function areMessagesCorrect(messages, userChannels, users) {
     checkField(message, "post_at");
     checkField(message, "channel");
 
+    //TODO: throw error for NaN date
     try {
       Date.parse(message.post_at);
+      Date.parse(message.repeat);
     } catch (e) {
       throw `${e} in file ${message.file}`;
     }
@@ -102,6 +102,8 @@ function areMessagesCorrect(messages, userChannels, users) {
       throw `Channel ${message.channel} not found for message in file ${message.file}`;
     }
   }
+
+  messages = stringToDateConverter(messages);
 }
 
 module.exports = {
