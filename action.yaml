@@ -1,23 +1,15 @@
-name: "Hello World"
-description: "Greet someone and record the time"
+name: "Slack Message Scheduler"
+description: "Schedules messages from the files specified in message-file"
 inputs:
-  who-to-greet: # id of input
-    description: "Who to greet"
-    required: true
-    default: "World"
   slack-user-oauth-access-token:
-    description: "User OAuth Access Token"
+    description: "User OAuth access token, or alternative a json with user-names as keys and their tokens as values"
     required: true
   message-file:
-    description: "File with messages to be send"
+    description: "File with messages to be send, seperate multiple files with ;"
     required: true
   slack-workspace-id:
     description: "If provided it checks the given user tokens if they are from the workspace id"
     required: false
-outputs:
-  time: # id of output
-    description: "The time we greeted you"
 runs:
-  using: "node12"
-  # pre: 'setup.js' #TODO Does not work locally investigate
+  using: "node12"  
   main: "index.js"
