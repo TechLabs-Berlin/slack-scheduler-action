@@ -1,5 +1,11 @@
 const slackifyMarkdown = require("slackify-markdown");
 
+class DateError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "DateError";
+  }
+}
 const buildMessage = (channel, text, time) => {
   return {
     channel: channel,
@@ -85,10 +91,23 @@ function areMessagesCorrect(messages, userChannels, users) {
 
     //TODO: throw error for NaN date
     try {
-      Date.parse(message.post_at);
-      Date.parse(message.repeat_until);
+      if (isNaN(Date.parse(message.post_at))) {
+        throw new DateError(
+          `'post_at' date is NaN: **${message.post_at}** of message: '${message.text}'`
+        );
+      }
+      if (message.repeat_until && isNaN(Date.parse(message.repeat_until))) {
+        throw new DateError(
+          `'repeat_until' date is NaN: **${message.repeat_until}** of message: '${message.text}'`
+        );
+      }
     } catch (e) {
-      throw `${e} in file ${message.file}`;
+      if (e instanceof DateError) {
+        console.log(`Your date syntax is incorrect: ${e.message}`);
+        throw e;
+      } else {
+        throw `${e} in file ${message.file}`;
+      }
     }
 
     // CHECK IF HAS USER || DEFAULT AND IF USER EXISTS
