@@ -68,7 +68,7 @@ async function main() {
         console.error(`${error} for mesage: \n ${message.text}`);
       });
       results.push(result);
-      Sleep(1000)
+      await Sleep(1000)
 
       //TODO put in proper error handling
     }
