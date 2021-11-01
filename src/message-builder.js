@@ -46,7 +46,10 @@ function incrimentDateWeekly(startDate, endDate) {
   let date = new Date(startDate);
   let dateList = [];
 
-  var endDateLimit = new Date(date.setMonth(date.getMonth()+2));
+
+  var currentdate = new Date();
+  
+  var endDateLimit = new Date(currentdate.setMonth(currentdate.getMonth()+2));
 
   endDate = endDate < endDateLimit ? endDate : endDateLimit;
 
