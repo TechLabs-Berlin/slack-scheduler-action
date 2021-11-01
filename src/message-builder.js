@@ -42,8 +42,13 @@ function convertChannelNameToId(channel, channels) {
 }
 
 function incrimentDateWeekly(startDate, endDate) {
+  //Only push messages for the next 2 month
   let date = new Date(startDate);
   let dateList = [];
+
+  var endDateLimit = new Date(date.setMonth(date.getMonth()+2));
+
+  endDate = endDate < endDateLimit ? endDate : endDateLimit;
 
   while (date < endDate) {
     dateList.push(date);

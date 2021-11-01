@@ -4,6 +4,20 @@ This action wraps the [chat.scheduleMessage](https://api.slack.com/methods/chat.
 
 ## Usage
 
+### Example usage
+<!-- 
+## Example usage
+
+uses: actions/hello-world-javascript-action@v1.1
+with:
+  who-to-greet: 'Mona the Octocat' -->
+
+### Tests
+Run the following to run unit tests:
+
+```
+npm run test
+```
 ## Inputs
 
 ### `slack-user-oauth-access-token`
@@ -48,16 +62,11 @@ The action requires for every message a specified token. So if you don`t have a 
 
 **Text-format**
 We use [Slackify-Markdown](https://github.com/jsarafajr/slackify-markdown) to convert markdown in text to the slack-specific format.
-<!-- 
-## Example usage
 
-uses: actions/hello-world-javascript-action@v1.1
-with:
-  who-to-greet: 'Mona the Octocat' -->
 
 ## Formatting messages
 Please refer to Slack's documentation on [message formatting](https://api.slack.com/reference/surfaces/formatting). They also have a [message builder](https://api.slack.com/docs/messages/builder) that's great for playing around and previewing messages. Your messages can contain attachments, markdown, buttons, and more.
 
 ## License
-The Dockerfile and associated scripts and documentation in this project are released under the MIT License.
+The associated scripts and documentation in this project are released under the MIT License.
 

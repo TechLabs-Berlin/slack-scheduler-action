@@ -18,6 +18,10 @@ const setup = require("./setup");
 // TODO Optimize api calls to avoid rate limits. E.g. don't delete messages which we would identically schedule again
 // TODO Add files: 1. Upload file, 2. Make file sharable 3. generte image text based on: https://stackoverflow.com/questions/58186399/how-to-create-a-slack-message-containing-an-uploaded-image/58189401#58189401
 
+function Sleep(milliseconds) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+ }
+
 async function main() {
   //TODO make proper async
   try {
@@ -33,6 +37,9 @@ async function main() {
     );
 
     const workspaceId = core.getInput("slack-workspace-id");
+
+    const isDryRun = core.getInput("dry-run");
+
     const workspaceIdConverted = workspaceId === "" ? null : workspaceId;
     checkUserTokens(userTokens, workspaceIdConverted);
 
@@ -61,6 +68,7 @@ async function main() {
         console.error(`${error} for mesage: \n ${message.text}`);
       });
       results.push(result);
+      Sleep(1000)
 
       //TODO put in proper error handling
     }
