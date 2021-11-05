@@ -40,9 +40,12 @@ async function main() {
 
     const isDryRun = core.getInput("dry-run");
     const sendMessagesPast = core.getInput('send-messages-from-past').toLowerCase() === 'true';
+    const delayBetweenSend = parseInt(core.getInput('delay-between-send'))
+
     console.log('Configuration:' + JSON.stringify({
       isDryRunL: isDryRun,
-      sendMessagesPast: sendMessagesPast
+      sendMessagesPast: sendMessagesPast,
+      delayBetweenSend: delayBetweenSend
     }));
 
     const workspaceIdConverted = workspaceId === "" ? null : workspaceId;
@@ -79,7 +82,7 @@ async function main() {
           console.error(`${error} for mesage: \n ${message.text}`);
         });
         results.push(result);
-        await Sleep(1000)
+        await Sleep(delayBetweenSend)
       }
       else{
         messagesNotSend++;
