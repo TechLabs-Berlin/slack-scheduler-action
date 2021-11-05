@@ -72,6 +72,9 @@ async function main() {
     
     const messagesNotSend = 0;
 
+    // Sorting helps to send out soon scheduled messages sooner
+    allMessages.sort((a,b) => a.post_at - b.post_at)
+
     for (let message of allMessages) {
       const user = message.user || "default";
       const channels = userChannels[user];
