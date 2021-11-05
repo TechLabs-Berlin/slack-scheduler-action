@@ -14,6 +14,10 @@ inputs:
     description: "If true sends messages which are already in the past default: true"
     default: "true"
     required: false
+  max-messages-in-future:
+    description: "Defines how long in the future messages are scheduled in days. Default: 180"
+    default: "180"
+    required: false
   delay-between-send:
     description: "Sets the delay in ms between sending messages. Slack API does silently not schedule messages when send to often. (Default:0 Recommendation with more messages: 1000)"
     default: "0"

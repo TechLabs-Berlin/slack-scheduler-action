@@ -40,11 +40,17 @@ async function main() {
 
     const isDryRun = core.getInput("dry-run");
     const sendMessagesPast = core.getInput('send-messages-from-past').toLowerCase() === 'true';
+    const maxMessagesInFutureDays = parseInt(core.getInput('max-messages-in-future'))
+
+    var maxMessagesInFuture = new Date()
+    maxMessagesInFuture.setDate(maxMessagesInFuture.getDate() + maxMessagesInFutureDays);
+
     const delayBetweenSend = parseInt(core.getInput('delay-between-send'))
 
     console.log('Configuration:' + JSON.stringify({
       isDryRunL: isDryRun,
       sendMessagesPast: sendMessagesPast,
+      maxMessagesInFuture: maxMessagesInFuture,
       delayBetweenSend: delayBetweenSend
     }));
 
@@ -76,7 +82,7 @@ async function main() {
         message.post_at
       );
 
-      if (sendMessagesPast || message.post_at > now) {
+      if ((sendMessagesPast || message.post_at > now) && message.post_at < maxMessagesInFuture) {
         const result = slack.sendMessage(token, messageBuilded);
         result.catch((error) => {
           console.error(`${error} for mesage: \n ${message.text}`);
