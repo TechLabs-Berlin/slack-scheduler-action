@@ -20,7 +20,7 @@ const setup = require("./setup");
 
 function Sleep(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
- }
+}
 
 async function main() {
   //TODO make proper async
@@ -39,6 +39,20 @@ async function main() {
     const workspaceId = core.getInput("slack-workspace-id");
 
     const isDryRun = core.getInput("dry-run");
+    const sendMessagesPast = core.getInput('send-messages-from-past').toLowerCase() === 'true';
+    const maxMessagesInFutureDays = parseInt(core.getInput('max-messages-in-future'))
+
+    var maxMessagesInFuture = new Date()
+    maxMessagesInFuture.setDate(maxMessagesInFuture.getDate() + maxMessagesInFutureDays);
+
+    const delayBetweenSend = parseInt(core.getInput('delay-between-send'))
+
+    console.log('Configuration:' + JSON.stringify({
+      isDryRunL: isDryRun,
+      sendMessagesPast: sendMessagesPast,
+      maxMessagesInFuture: maxMessagesInFuture,
+      delayBetweenSend: delayBetweenSend
+    }));
 
     const workspaceIdConverted = workspaceId === "" ? null : workspaceId;
     checkUserTokens(userTokens, workspaceIdConverted);
@@ -54,6 +68,13 @@ async function main() {
 
     const results = [];
 
+    const now = Date.now();
+    
+    const messagesNotSend = 0;
+
+    // Sorting helps to send out soon scheduled messages sooner
+    allMessages.sort((a,b) => a.post_at - b.post_at)
+
     for (let message of allMessages) {
       const user = message.user || "default";
       const channels = userChannels[user];
@@ -63,15 +84,22 @@ async function main() {
         message.text,
         message.post_at
       );
-      const result = slack.sendMessage(token, messageBuilded);
-      result.catch((error) => {
-        console.error(`${error} for mesage: \n ${message.text}`);
-      });
-      results.push(result);
-      await Sleep(1000)
 
+      if ((sendMessagesPast || message.post_at > now) && message.post_at < maxMessagesInFuture) {
+        const result = slack.sendMessage(token, messageBuilded);
+        result.catch((error) => {
+          console.error(`${error} for mesage: \n ${message.text}`);
+        });
+        results.push(result);
+        await Sleep(delayBetweenSend)
+      }
+      else{
+        messagesNotSend++;
+      }
       //TODO put in proper error handling
     }
+
+    console.log('Messages not send: ' + messagesNotSend);
     // TODO Output scheduled messages
 
     for (let result of results) {
