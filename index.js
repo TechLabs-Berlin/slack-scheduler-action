@@ -20,7 +20,7 @@ const setup = require("./setup");
 
 function Sleep(milliseconds) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
- }
+}
 
 async function main() {
   //TODO make proper async
@@ -39,6 +39,11 @@ async function main() {
     const workspaceId = core.getInput("slack-workspace-id");
 
     const isDryRun = core.getInput("dry-run");
+    const sendMessagesPast = core.getInput('send-messages-from-past').toLowerCase() === 'true';
+    console.log('Configuration:' + JSON.stringify({
+      isDryRunL: isDryRun,
+      sendMessagesPast: sendMessagesPast
+    }));
 
     const workspaceIdConverted = workspaceId === "" ? null : workspaceId;
     checkUserTokens(userTokens, workspaceIdConverted);
@@ -54,6 +59,10 @@ async function main() {
 
     const results = [];
 
+    const now = Date.now();
+    
+    const messagesNotSend = 0;
+
     for (let message of allMessages) {
       const user = message.user || "default";
       const channels = userChannels[user];
@@ -63,15 +72,22 @@ async function main() {
         message.text,
         message.post_at
       );
-      const result = slack.sendMessage(token, messageBuilded);
-      result.catch((error) => {
-        console.error(`${error} for mesage: \n ${message.text}`);
-      });
-      results.push(result);
-      await Sleep(1000)
 
+      if (sendMessagesPast || message.post_at > now) {
+        const result = slack.sendMessage(token, messageBuilded);
+        result.catch((error) => {
+          console.error(`${error} for mesage: \n ${message.text}`);
+        });
+        results.push(result);
+        await Sleep(1000)
+      }
+      else{
+        messagesNotSend++;
+      }
       //TODO put in proper error handling
     }
+
+    console.log('Messages not send: ' + messagesNotSend);
     // TODO Output scheduled messages
 
     for (let result of results) {

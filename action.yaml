@@ -10,6 +10,10 @@ inputs:
   slack-workspace-id:
     description: "If provided it checks the given user tokens if they are from the workspace id"
     required: false
+  send-messages-from-past:
+    description: "If true sends messages which are already in the past default: true"
+    default: "true"
+    required: false
 runs:
   using: "node12"  
   main: "index.js"
